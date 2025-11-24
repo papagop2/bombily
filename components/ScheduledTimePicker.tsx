@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { format, addDays, addHours, isAfter, setHours, setMinutes } from 'date-fns'
-import { ru } from 'date-fns/locale/ru'
+import { format, addDays, addHours, isAfter, setHours as setHoursFn, setMinutes as setMinutesFn } from 'date-fns'
+import { ru } from 'date-fns/locale'
 
 interface ScheduledTimePickerProps {
   value: string | null
@@ -54,7 +54,7 @@ export default function ScheduledTimePicker({ value, onChange }: ScheduledTimePi
     let targetDate: Date
     
     if (day === 'today') {
-      targetDate = setMinutes(setHours(now, hoursNum), minutesNum)
+      targetDate = setMinutesFn(setHoursFn(now, hoursNum), minutesNum)
       
       // Проверяем, что время не раньше чем через 2 часа
       const minTime = addHours(now, 2)
@@ -73,7 +73,7 @@ export default function ScheduledTimePicker({ value, onChange }: ScheduledTimePi
       }
     } else {
       const tomorrow = addDays(now, 1)
-      targetDate = setMinutes(setHours(tomorrow, hoursNum), minutesNum)
+      targetDate = setMinutesFn(setHoursFn(tomorrow, hoursNum), minutesNum)
     }
     
     onChange(targetDate.toISOString())

@@ -1,7 +1,7 @@
 'use client'
 
 import { format } from 'date-fns'
-import { ru } from 'date-fns/locale/ru'
+import { ru } from 'date-fns/locale'
 import { motion } from 'framer-motion'
 import type { Order } from '@/lib/supabase'
 

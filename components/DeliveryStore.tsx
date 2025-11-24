@@ -79,8 +79,9 @@ export default function DeliveryStore({ userId, onOrderCreated }: DeliveryStoreP
       setLoadingShops(false)
       return
     }
+    const cityId = user.city_id
     if (storeShops.length) {
-      const filtered = storeShops.filter((shop) => shop.city_id === user.city_id)
+      const filtered = storeShops.filter((shop) => shop.city_id === cityId)
       setLocalShops(filtered)
       setSelectedShopId((prev) => prev || filtered[0]?.id || null)
       setLoadingShops(false)
@@ -90,7 +91,7 @@ export default function DeliveryStore({ userId, onOrderCreated }: DeliveryStoreP
       const { data } = await supabase
         .from('shops')
         .select('*')
-        .eq('city_id', user.city_id)
+        .eq('city_id', cityId)
         .order('name')
       if (data) {
         setLocalShops(data as Shop[])
@@ -255,7 +256,7 @@ export default function DeliveryStore({ userId, onOrderCreated }: DeliveryStoreP
 
       if (orderError) throw orderError
 
-      const deliveryItems: Omit<DeliveryItem, 'id'>[] = cart.map((item) => ({
+      const deliveryItems: Omit<DeliveryItem, 'id' | 'created_at'>[] = cart.map((item) => ({
         order_id: order.id,
         product_id: item.product.id,
         quantity: item.quantity,
