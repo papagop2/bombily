@@ -273,7 +273,13 @@ CREATE POLICY "Orders select access" ON orders
 
 CREATE POLICY "Passengers insert orders" ON orders
   FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+  WITH CHECK (
+    auth.uid() = user_id
+    AND EXISTS (
+      SELECT 1 FROM users
+      WHERE id = user_id AND role = 'passenger'
+    )
+  );
 
 CREATE POLICY "Orders update access" ON orders
   FOR UPDATE
